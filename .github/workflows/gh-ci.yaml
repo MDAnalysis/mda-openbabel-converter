@@ -76,7 +76,7 @@ jobs:
     - name: Install package
       run: |
         python --version
-        python -m pip install .  --no-deps
+        python -m pip install .  --no-deps 
 
     - name: Python information
       run: |
@@ -103,7 +103,7 @@ jobs:
 
 
   pylint_check:
-    if: "github.repository == 'MDAnalysis/mda_openbabel_converter'"
+    if: "github.repository == 'lunamorrow/mda_openbabel_converter'"
     runs-on: ubuntu-latest
 
     steps:
@@ -141,7 +141,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install pipx twine
+        pip install pipx twine openbabel<3.0.0
 
     - name: Build package
       run: |

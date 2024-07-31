@@ -1,4 +1,4 @@
-name: mda_openbabel_converter-test
+name: mda_openbabel_converter
 channels:
   - conda-forge
   - defaults
@@ -9,6 +9,7 @@ dependencies:
 
   # MDAnalysis
   - MDAnalysis
+  - MDAnalysisTests
 
   # OpenBabel
   - openbabel
