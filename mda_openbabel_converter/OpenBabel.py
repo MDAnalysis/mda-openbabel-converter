@@ -46,6 +46,9 @@ class OpenBabelReader(MemoryReader):
         """
         Converts file to OBMol to AtomGroup
         """
+        n_conf = filename.NumConformers()
+        if n_conf > 1:
+            raise("Reader does not support OBMol's with more than one conformer")
         n_atoms = filename.NumAtoms()
         coordinates = np.array([
             [(coords := atom.GetVector()).GetX(),
