@@ -46,15 +46,28 @@ class OpenBabelReader(MemoryReader):
         """
         Converts file to OBMol to AtomGroup
         """
-        n_conf = filename.NumConformers()
-        if n_conf > 1:
-            raise("Reader does not support OBMol's with more than one conformer")
         n_atoms = filename.NumAtoms()
-        coordinates = np.array([
-            [(coords := atom.GetVector()).GetX(),
-            coords.GetY(),
-            coords.GetZ()] for atom in OBMolAtomIter(filename)],
-            dtype=np.float32)
+        # single position
+        if filename.NumConformers() == 1:
+            coordinates = np.array([
+                [(coords := atom.GetVector()).GetX(),
+                coords.GetY(),
+                coords.GetZ()] for atom in OBMolAtomIter(filename)],
+                dtype=np.float32)
+        else:
+            # multiple conformers, such as for a trajectory
+            numConf = filename.NumConformers()
+            coordinates = np.zeros((numConf, n_atoms, 3))
+            for conf_id in range(numConf):
+                filename.SetConformer(conf_id)
+                for atom in OBMolAtomIter(filename):
+                    coordinates_inner = np.array([
+                        [(coords := atom.GetVector()).GetX(),
+                        coords.GetY(),
+                        coords.GetZ()] for atom in OBMolAtomIter(filename)],
+                        dtype=np.float32)
+                coordinates[conf_id] = coordinates_inner
+        # no coordinates present
         if not np.any(coordinates):
             warnings.warn("No coordinates found in the OBMol")
             coordinates = np.empty((1, n_atoms, 3), dtype=np.float32)

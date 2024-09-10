@@ -67,27 +67,31 @@ class TestOpenBabelReader(object):
             dtype=np.float32)
         assert_equal(expected, universe.trajectory.coordinate_array[0])
 
-    # def test_multiple_conformer(self):
-    #     obconversion = ob.OBConversion()
-    #     obconversion.SetInFormat("xyz")
-    #     obmol = ob.OBMol()
-    #     notatend = obconversion.ReadFile(obmol, MET_ENKAPH_MOVIE.as_posix())
-    #     obmol_master = ob.OBMol()
-    #     obconversion.ReadFile(obmol_master, MET_ENKAPH_MOVIE.as_posix())
-    #     index = 0
-    #     while notatend:
-    #         # temp = obmol_master.GetConformer(0)
-    #         # obmol.CopyConformer(temp, 0)
-    #         #obmol_master.AddConformer(temp)
+    def test_multiple_conformer(self):
+        ob_conversion = ob.OBConversion()
+        ob_conversion.SetInFormat("smi")
+        mol = ob.OBMol()
+        ob_conversion.ReadString(mol, "CC(=O)OC1=CC=CC=C1C(=O)O")
+        assert mol.AddHydrogens()
 
-    #         print(obmol.GetConformer(0))
-    #         temp = obmol.GetConformer(0)
-    #         obmol_master.AddConformer(temp)
-            
-    #         obmol = ob.OBMol()
-    #         notatend = obconversion.Read(obmol)
-    #     print(obmol_master.NumConformers())
-    #     assert 1 == 0
+        # build basic 3D coordinates
+        builder = ob.OBBuilder()
+        assert builder.Build(mol)
+
+        # generate multiconfs
+        confsearch = ob.OBConformerSearch()
+        num_conformers = 3
+        confsearch.Setup(mol, num_conformers)
+        confsearch.Search()
+        confsearch.GetConformers(mol)
+        assert mol.NumConformers() == 3
+
+        # convert to Universe
+        universe = mda.Universe(mol)
+        n_atoms = mol.NumAtoms()
+        expected_coordinates = np.empty((mol.NumConformers(), n_atoms, 3))
+        expected_shape = expected_coordinates.shape
+        assert_equal(universe.trajectory.coordinate_array.shape, expected_shape)
 
     def test_no_coordinates(self):
         obConversion = ob.OBConversion()
