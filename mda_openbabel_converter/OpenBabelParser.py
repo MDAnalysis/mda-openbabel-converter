@@ -118,7 +118,6 @@ class OpenBabelParser(TopologyReaderBase):
                 resid = atom.GetResidue()
                 resnums.append(resid.GetNum())
                 resnames.append(resid.GetName())
-                chainids.append(resid.GetChain())
                 icodes.append(resid.GetInsertionCode())
 
             aromatics.append(atom.IsAromatic())
