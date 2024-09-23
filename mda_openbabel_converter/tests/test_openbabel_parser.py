@@ -4,21 +4,17 @@ import MDAnalysis as mda
 import openbabel
 from openbabel import openbabel as ob
 from openbabel.openbabel import OBMol, OBConversion, GetSymbol
-from mda_openbabel_converter.data.files import CRN, HEME, COMPLEX_SDF, MET_ENKAPH_MOVIE
+from mda_openbabel_converter.data.files import CRN, HEME, COMPLEX_SDF
 
 import mda_openbabel_converter
-import pytest  # version 8.2.2
+import pytest
 import sys
 import numpy as np
 from numpy.testing import assert_equal, assert_allclose
 from MDAnalysisTests.topology.base import ParserBase
 from MDAnalysis.core.topology import Topology
 
-import mda_openbabel_converter.OpenBabelParser  # version 2.7.0
-
-# *** can run with "python -m pytest" but not "pytest" (can't find
-# MDAnalysis) - need to fix this! ***
-
+import mda_openbabel_converter.OpenBabelParser
 
 class OpenBabelParserBase(ParserBase):
     parser = mda_openbabel_converter.OpenBabelParser.OpenBabelParser
@@ -114,8 +110,8 @@ class TestOpenBabelParserSMILES(OpenBabelParserBase):
             atom.GetExactMass() for atom in ob.OBMolAtomIter(filename)])
         assert_allclose(expected, top.masses.values)
 
+
 class TestOpenBabelParserPDB(OpenBabelParserBase):
-    # expected_attrs = OpenBabelParserBase.expected_attrs + ['charges', 'resnames', 'icodes', 'chainIDs']
     expected_attrs = OpenBabelParserBase.expected_attrs + ['charges', 'resnames', 'icodes']
 
     @pytest.fixture()
@@ -130,7 +126,6 @@ class TestOpenBabelParserPDB(OpenBabelParserBase):
     def top(self, filename):
         yield self.parser(filename).parse()
 
-    # to do: check these values!
     expected_n_atoms = 327
     expected_n_residues = 46
     expected_n_segments = 1
@@ -138,28 +133,12 @@ class TestOpenBabelParserPDB(OpenBabelParserBase):
 
     def test_attrs_total_counts(self, top):
         u = mda.Universe(top, format = 'OPENBABEL')
-        # expected = np.array([
-        #     [(coords := atom.GetVector()).GetX(),
-        #     coords.GetY(),
-        #     coords.GetZ()] for atom in OBMolAtomIter(obmol)],
-        #     dtype=np.float32)
-        # assert_equal(expected, universe.trajectory.coordinate_array[0])
         ag = u.select_atoms("all")
         res = ag.residues
         seg = ag.segments
         assert len(ag) == self.expected_n_atoms
         assert len(res) == self.expected_n_residues
         assert len(seg) == self.expected_n_segments
-        
-    # def test_icodes(self, top, filename):
-    #     expected = np.array([
-    #         atom.GetResidue().GetInsertionCode() for atom in ob.OBMolAtomIter(filename)])
-    #     for atom in ob.OBMolAtomIter(filename):
-    #         print(f"ic ={atom.GetResidue().GetInsertionCode()}gotit?")
-    #     self.parser(filename).parse()
-    #     print(top.icodes.values)
-    #     print(expected)
-    #     assert_equal(expected, top.icodes.values)
         
     def test_elements(self, top, filename):
         expected = np.array([
@@ -186,13 +165,6 @@ class TestOpenBabelParserPDB(OpenBabelParserBase):
             residue.GetNum() for residue in ob.OBResidueIter(filename)])
         assert_equal(expected_ids, top.resids.values)
 
-        # self.parser(filename).parse()
-        # expected_chains = np.array([
-        #     residue.GetChain() for residue in ob.OBResidueIter(filename)])
-        # print(expected_chains)
-        # print(top.chainIDs.values)
-        # # assert_equal(expected_chains, top.chainIDs.values)
-        # assert_equal(0, 1)
 
 class TestOpenBabelParserSDF(OpenBabelParserBase):
     expected_attrs = OpenBabelParserBase.expected_attrs + ['charges']
@@ -210,7 +182,6 @@ class TestOpenBabelParserSDF(OpenBabelParserBase):
     def top(self, filename):
         yield self.parser(filename).parse()
 
-    # to do: check these values!
     expected_n_atoms = 212
     expected_n_residues = 1
     expected_n_segments = 1
@@ -224,6 +195,7 @@ class TestOpenBabelParserSDF(OpenBabelParserBase):
         assert len(ag) == self.expected_n_atoms
         assert len(res) == self.expected_n_residues
         assert len(seg) == self.expected_n_segments
+
 
 class TestOpenBabelParserMOL(OpenBabelParserBase):
     expected_attrs = OpenBabelParserBase.expected_attrs + ['charges']
@@ -240,7 +212,6 @@ class TestOpenBabelParserMOL(OpenBabelParserBase):
     def top(self, filename):
         yield self.parser(filename).parse()
 
-    # to do: check these values!
     expected_n_atoms = 43
     expected_n_residues = 1
     expected_n_segments = 1
