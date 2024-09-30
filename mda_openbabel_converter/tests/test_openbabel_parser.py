@@ -4,7 +4,7 @@ import MDAnalysis as mda
 import openbabel
 from openbabel import openbabel as ob
 from openbabel.openbabel import OBMol, OBConversion, GetSymbol
-from mda_openbabel_converter.data.files import CRN, HEME, COMPLEX_SDF
+from mda_openbabel_converter.data.files import CRN, HEME, COMPLEX_SDF, PYRROL
 
 import mda_openbabel_converter
 import pytest
@@ -174,18 +174,17 @@ class TestOpenBabelParserSDF(OpenBabelParserBase):
         obconversion = ob.OBConversion()
         obconversion.SetInFormat("sdf")
         mol = ob.OBMol()
-        obconversion.ReadFile(mol, COMPLEX_SDF.as_posix())
-        print(mol.NumBonds())
+        obconversion.ReadFile(mol, PYRROL.as_posix())
         return mol
 
     @pytest.fixture()
     def top(self, filename):
         yield self.parser(filename).parse()
 
-    expected_n_atoms = 212
+    expected_n_atoms = 31
     expected_n_residues = 1
     expected_n_segments = 1
-    expected_n_bonds = 0  # OpenBabel unable to read bonds
+    expected_n_bonds = 30
 
     def test_attrs_total_counts(self, top):
         u = mda.Universe(top, format = 'OPENBABEL')
