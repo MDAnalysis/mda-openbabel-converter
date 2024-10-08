@@ -221,7 +221,6 @@ class TestOpenBabelParserMOL(OpenBabelParserBase):
         ag = u.select_atoms("all")
         res = ag.residues
         seg = ag.segments
-        print(len(ag))
         assert len(ag) == self.expected_n_atoms
         assert len(res) == self.expected_n_residues
         assert len(seg) == self.expected_n_segments
