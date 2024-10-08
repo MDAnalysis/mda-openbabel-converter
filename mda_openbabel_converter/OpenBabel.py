@@ -51,8 +51,8 @@ class OpenBabelReader(MemoryReader):
         if filename.NumConformers() == 1:
             coordinates = np.array([
                 [(coords := atom.GetVector()).GetX(),
-                coords.GetY(),
-                coords.GetZ()] for atom in OBMolAtomIter(filename)],
+                    coords.GetY(),
+                    coords.GetZ()] for atom in OBMolAtomIter(filename)],
                 dtype=np.float32)
         else:
             # multiple conformers, such as for a trajectory
@@ -63,8 +63,8 @@ class OpenBabelReader(MemoryReader):
                 for atom in OBMolAtomIter(filename):
                     coordinates_inner = np.array([
                         [(coords := atom.GetVector()).GetX(),
-                        coords.GetY(),
-                        coords.GetZ()] for atom in OBMolAtomIter(filename)],
+                            coords.GetY(),
+                            coords.GetZ()] for atom in OBMolAtomIter(filename)],
                         dtype=np.float32)
                 coordinates[conf_id] = coordinates_inner
         # no coordinates present
@@ -72,7 +72,8 @@ class OpenBabelReader(MemoryReader):
             warnings.warn("No coordinates found in the OBMol")
             coordinates = np.empty((1, n_atoms, 3), dtype=np.float32)
             coordinates[:] = np.nan
-        super(OpenBabelReader, self).__init__(coordinates, order='fac', **kwargs)
+        super(OpenBabelReader, self).__init__(coordinates, 
+                order='fac', **kwargs)
 
 class OpenBabelConverter(ConverterBase):
     """
