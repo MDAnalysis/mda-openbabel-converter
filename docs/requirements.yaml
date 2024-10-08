@@ -1,13 +1,22 @@
 name: mda_openbabel_converter-docs
 channels:
-
   - conda-forge
-
+  - defaults
 dependencies:
-    # Base depends
+  # Base depends
   - python
   - pip
-
   - mdanalysis-sphinx-theme >=1.0.1
-    # Pip-only installs
-  #- pip:
+
+  # MDAnalysis
+  - MDAnalysis
+  - MDAnalysisTests
+
+  # OpenBabel
+  - openbabel
+
+  # Testing
+  - pytest
+  - pytest-cov
+  - pytest-xdist
+  - codecov
