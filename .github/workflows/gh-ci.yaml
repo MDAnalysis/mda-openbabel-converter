@@ -141,7 +141,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install pipx twine openbabel<3.0.0
+        pip install pipx twine openbabel>=3.0.0
 
     - name: Build package
       run: |
