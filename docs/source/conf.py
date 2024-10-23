@@ -193,4 +193,5 @@ texinfo_documents = [
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "mdanalysis": ("https://docs.mdanalysis.org/stable/", None),
+    "openbabel": ("https://openbabel.org/", None),
 }

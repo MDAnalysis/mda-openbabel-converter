@@ -1,32 +1,11 @@
-# -*- Mode: python; tab-width: 4; indent-tabs-mode:nil; coding:utf-8 -*-
-# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 
-#
-# MDAnalysis --- https://www.mdanalysis.org
-# Copyright (c) 2006-2017 The MDAnalysis Development Team and contributors
-# (see the file AUTHORS for the full list of names)
-#
-# Released under the GNU Public Licence, v2 or any higher version
-#
-# Please cite your use of MDAnalysis in published work:
-#
-# R. J. Gowers, M. Linke, J. Barnoud, T. J. E. Reddy, M. N. Melo, S. L. Seyler,
-# D. L. Dotson, J. Domanski, S. Buchoux, I. M. Kenney, and O. Beckstein.
-# MDAnalysis: A Python package for the rapid analysis of molecular dynamics
-# simulations. In S. Benthall and S. Rostrup editors, Proceedings of the 15th
-# Python in Science Conference, pages 102-109, Austin, TX, 2016. SciPy.
-# doi: 10.25080/majora-629e541a-00e
-#
-# N. Michaud-Agrawal, E. J. Denning, T. B. Woolf, and O. Beckstein.
-# MDAnalysis: A Toolkit for the Analysis of Molecular Dynamics Simulations.
-# J. Comput. Chem. 32 (2011), 2319--2327, doi:10.1002/jcc.21787
-#
+"""OpenBabel molecule I/O --- :mod:`mda_openbabel_converter.OpenBabel`
+======================================================================
 
-"""OpenBabel molecule I/O --- :mod:`MDAnalysis.MDAKits.mdakits.open-babel-converter`
-================================================================
-
-Read coordinates data from an `OpenBabel <http://openbabel.org/api/3.0/classOpenBabel_1_1OBMol.shtml>`_ :class:`openbabel.openbabel.OBMol` with
-:class:`OpenBabelReader` into an MDAnalysis Universe. Convert it back to a
-:class:`openbabel.openbabel.OBMol` with :class:`OpenBabelConverter`.
+Read coordinates data from an
+`OpenBabel <http://openbabel.org/api/3.0/classOpenBabel_1_1OBMol.shtml>`_
+:class:`openbabel.openbabel.OBMol` with :class:`OpenBabelReader` into an
+MDAnalysis Universe. Convert it back to a :class:`openbabel.openbabel.OBMol`
+with :class:`OpenBabelConverter`.
 
 Example
 -------
@@ -34,13 +13,11 @@ Example
 To read an OpenBabel OBMol and then convert the AtomGroup back to an OpenBabel
 OBMol::
 
-    >>> import openbabel
     >>> from openbabel import openbabel as ob
-    >>> from openbabel.openbabel import OBMol, OBConversion, GetSymbol
     >>> import MDAnalysis as mda
-    >>> obConversion = ob.OBConversion()
-    >>> obconversion.SetInFormat("pdb")  
-    >>> mol = OBMol()
+    >>> obconversion = ob.OBConversion()
+    >>> obconversion.SetInFormat("pdb")
+    >>> mol = ob.OBMol()
     >>> obconversion.ReadFile(mol, "1crn.pdb")
     >>> u = mda.Universe(mol)
     >>> u
@@ -91,9 +68,9 @@ class OpenBabelReader(MemoryReader):
     Inherits from MemoryReader and converts OpenBabel OBMol Coordinates to a
     MDAnalysis Trajectory which is used to build a Universe. This reader
     does NOT work in the reverse direction. 
-    
-    See :class:`mda_openbabel_converter.OpenBabelConverter` for MDAnalysis 
-    Universe to OpenBabel OBMol conversion.
+
+    See :class:`mda_openbabel_converter.OpenBabel.OpenBabelConverter` for
+    MDAnalysis Universe to OpenBabel OBMol conversion.
     """
     format = 'OPENBABEL'
 
@@ -146,10 +123,10 @@ class OpenBabelReader(MemoryReader):
 
 class OpenBabelConverter(ConverterBase):
     """
-    Inherits from ConverterBase and converts a MDAnalysis Universe to an 
-    OpenBabel OBMol. This converter does NOT work in the opposite direction. 
-    
-    See :class:`mda_openbabel_converter.OpenBabelReader` for OpenBabel OBMol 
+    Inherits from ConverterBase and converts a MDAnalysis Universe to an
+    OpenBabel OBMol. This converter does NOT work in the opposite direction.
+
+    See :class:`mda_openbabel_converter.OpenBabelReader` for OpenBabel OBMol
     to MDAnalysis Universe conversion.
     """
     def __repr__(self, **kwargs):
