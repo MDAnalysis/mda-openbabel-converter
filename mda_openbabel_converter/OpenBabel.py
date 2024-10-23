@@ -30,7 +30,7 @@ OBMol::
 
 .. warning::
     The OpenBabel converter is currently *experimental* and may not work as
-    expected for all molecules. 
+    expected for all molecules.
 
 
 Classes
@@ -67,7 +67,7 @@ class OpenBabelReader(MemoryReader):
 
     Inherits from MemoryReader and converts OpenBabel OBMol Coordinates to a
     MDAnalysis Trajectory which is used to build a Universe. This reader
-    does NOT work in the reverse direction. 
+    does NOT work in the reverse direction.
 
     See :class:`mda_openbabel_converter.OpenBabel.OpenBabelConverter` for
     MDAnalysis Universe to OpenBabel OBMol conversion.
