@@ -1,4 +1,8 @@
-# Testing OpenBabel and Pybel
+"""
+Test suite for the OpenBabel Parser that converts an OBMol's attributes to an
+MDAnalysis topology, alongside the OpenBabel Reader, that can be used to
+construct an MDAnalysis Universe.
+"""
 
 import MDAnalysis as mda
 import openbabel

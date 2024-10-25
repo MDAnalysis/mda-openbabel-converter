@@ -1,5 +1,46 @@
-"""
-Documentation...
+"""OpenBabel molecule I/O --- :mod:`mda_openbabel_converter.OpenBabel`
+======================================================================
+
+Read coordinates data from an
+`OpenBabel <http://openbabel.org/api/3.0/classOpenBabel_1_1OBMol.shtml>`_
+:class:`openbabel.openbabel.OBMol` with :class:`OpenBabelReader` into an
+MDAnalysis Universe. Convert it back to a :class:`openbabel.openbabel.OBMol`
+with :class:`OpenBabelConverter`.
+
+Example
+-------
+
+To read an OpenBabel OBMol and then convert the AtomGroup back to an OpenBabel
+OBMol::
+
+    >>> from openbabel import openbabel as ob
+    >>> import MDAnalysis as mda
+    >>> obconversion = ob.OBConversion()
+    >>> obconversion.SetInFormat("pdb")
+    >>> mol = ob.OBMol()
+    >>> obconversion.ReadFile(mol, "1crn.pdb")
+    >>> u = mda.Universe(mol)
+    >>> u
+    <Universe with 327 atoms>
+    >>> u.trajectory
+    <OpenBabelReader with 1 frame of 327 atoms>
+    >>> u.atoms.convert_to("OPENBABEL")
+    <openbabel.openbabel.OBMol object at 0x7fcebb958148>
+
+
+.. warning::
+    The OpenBabel converter is currently *experimental* and may not work as
+    expected for all molecules.
+
+
+Classes
+-------
+
+.. autoclass:: OpenBabelReader
+   :members:
+
+.. autoclass:: OpenBabelConverter
+   :members:
 """
 
 import MDAnalysis as mda
@@ -22,9 +63,14 @@ except ImportError:
 
 class OpenBabelReader(MemoryReader):
     """
+    Coordinate reader for OpenBabel.
+
     Inherits from MemoryReader and converts OpenBabel OBMol Coordinates to a
     MDAnalysis Trajectory which is used to build a Universe. This reader
-    does not work in the reverse direction.
+    does NOT work in the reverse direction.
+
+    See :class:`mda_openbabel_converter.OpenBabel.OpenBabelConverter` for
+    MDAnalysis Universe to OpenBabel OBMol conversion.
     """
     format = 'OPENBABEL'
 
@@ -77,7 +123,11 @@ class OpenBabelReader(MemoryReader):
 
 class OpenBabelConverter(ConverterBase):
     """
-    Convert a MDAnalysis AtomGroup to an OpenBabel OBMol
+    Inherits from ConverterBase and converts a MDAnalysis Universe to an
+    OpenBabel OBMol. This converter does NOT work in the opposite direction.
+
+    See :class:`mda_openbabel_converter.OpenBabelReader` for OpenBabel OBMol
+    to MDAnalysis Universe conversion.
     """
     def __repr__(self, **kwargs):
         """

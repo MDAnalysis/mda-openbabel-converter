@@ -1,4 +1,8 @@
-# Testing OpenBabel and Pybel
+"""
+Test suite for the OpenBabel Reader that converts an OBMol's atom coordinates
+to an MDAnalysis topology, alongside the OpenBabel Parser, that can be used to
+construct an MDAnalysis Universe.
+"""
 
 import MDAnalysis as mda
 import openbabel

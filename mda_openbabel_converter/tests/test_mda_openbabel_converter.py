@@ -1,8 +1,7 @@
 """
-Unit and regression test for the mda_openbabel_converter package.
+Base tests for the mda_openbabel_converter package.
 """
 
-# Import package, test suite, and other packages as needed
 import mda_openbabel_converter
 import pytest
 import sys

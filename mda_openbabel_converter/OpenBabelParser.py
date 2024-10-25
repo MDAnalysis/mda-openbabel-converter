@@ -1,5 +1,24 @@
 """
-Documentation...
+OpenBabel topology parser --- :mod:`mda_openbabel_converter.OpenBabel`
+======================================================================
+
+Converts an
+`OpenBabel <http://openbabel.org/api/3.0/classOpenBabel_1_1OBMol.shtml>`_
+:class:`openbabel.openbabel.OBMol` into a :class:`MDAnalysis.core.Topology`.
+
+
+See Also
+--------
+:mod:`mda_openbabel_converter.OpenBabel`
+
+
+Classes
+-------
+
+.. autoclass:: OpenBabelParser
+   :members:
+   :inherited-members:
+
 """
 
 import MDAnalysis as mda
@@ -46,9 +65,84 @@ except ImportError:
 
 class OpenBabelParser(TopologyReaderBase):
     """
+    For OpenBabel structure
+
     Inherits from TopologyReaderBase and converts an OpenBabel OBMol to a
     MDAnalysis Topology or adds it to a pre-existing Topology. This parser
     does not work in the reverse direction.
+
+    For use examples, please see :class:`mda_openbabel_converter.OpenBabel`
+
+    Creates the following Attributes:
+     - Atomids
+     - Atomtypes
+     - Aromaticities
+     - Elements
+     - Masses
+     - Bonds
+     - Resids
+     - Resnums
+     - Segids
+
+    Depending on OpenBabel's input, the following Attributes might be present:
+     - Charges
+     - Resnames
+     - ICodes
+
+    Guesses the following:
+     - Atomnames
+
+    Missing Attributes unable to be retrieved from OpenBabel:
+     - Chiralities
+     - RSChirality
+     - Occupancies
+     - Tempfactors
+     - ChainIDs
+     - AltLocs
+
+    Attributes table:
+
+    +---------------------------------------------+-------------------------+
+    | OpenBabel attribute                         | MDAnalysis equivalent   |
+    +=============================================+=========================+
+    |                                             | altLocs                 |
+    +---------------------------------------------+-------------------------+
+    | atom.IsAromatic()                           | aromaticities           |
+    +---------------------------------------------+-------------------------+
+    |                                             | chainIDs                |
+    +---------------------------------------------+-------------------------+
+    | atom.GetPartialCharge()                     | charges                 |
+    +---------------------------------------------+-------------------------+
+    | GetSymbol(atom.GetAtomicNum())              | elements                |
+    +---------------------------------------------+-------------------------+
+    | atom.GetResidue().GetInsertionCode()        | icodes                  |
+    +---------------------------------------------+-------------------------+
+    | atom.GetIdx()                               | indices                 |
+    +---------------------------------------------+-------------------------+
+    | atom.GetExactMass()                         | masses                  |
+    +---------------------------------------------+-------------------------+
+    | "%s%d" % (GetSymbol(atom.GetAtomicNum()),   | names                   |
+    | atom.GetIdx())                              |                         |
+    +---------------------------------------------+-------------------------+
+    |                                             | chiralities             |
+    +---------------------------------------------+-------------------------+
+    |                                             | occupancies             |
+    +---------------------------------------------+-------------------------+
+    | atom.GetResidue().GetName()                 | resnames                |
+    +---------------------------------------------+-------------------------+
+    | atom.GetResidue().GetNum()                  | resnums                 |
+    +---------------------------------------------+-------------------------+
+    |                                             | tempfactors             |
+    +---------------------------------------------+-------------------------+
+    | atom.GetType()                              | types                   |
+    +---------------------------------------------+-------------------------+
+
+    Raises
+    ------
+    ValueError
+        If only some of the atoms have ResidueInfo, from resid.GetNum(),
+        available
+
     """
     format = 'OPENBABEL'
 
@@ -84,7 +178,6 @@ class OpenBabelParser(TopologyReaderBase):
         ids = []
         atomtypes = []
         segids = []
-        chainids = []
         icodes = []
 
         if mol.Empty():

@@ -2,11 +2,6 @@
 Global pytest fixtures
 """
 
-# Use this file if you need to share any fixtures
-# across multiple modules
-# More information at
-# https://docs.pytest.org/en/stable/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session
-
 import pytest
 from mda_openbabel_converter.data.files import MDANALYSIS_LOGO
 
